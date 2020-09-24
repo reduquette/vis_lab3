@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Page Template</title>
+        <style>
+        </style>
+        <script type="text/javascript" src="https://d3js.org/d3.v6.min.js"></script>
+
+        <!-- <script type="text/javascript" src="../d3.js"></script> -->
+    </head>
+    <body>
+        <div class="container">
+            <h2>
+              Population in European countries
+            </h2>
+            <div class="city-count"></div>
+            <div class="population-plot"></div>
+        </div>
+        <script type="text/javascript">
+            let european_cities = ["Albania",
+                "Andorra",
+                "Armenia",
+                "Austria",
+                "Azerbaijan",
+                "Belarus",
+                "Belgium",
+                "Bosnia and Herzegovina",
+                "Bulgaria",
+                "Croatia",
+                "Cyprus",
+                "Czech Republic",
+                "Denmark",
+                "Estonia",
+                "Finland",
+                "France",
+                "Georgia",
+                "Germany",
+                "Greece",
+                "Hungary",
+                "Iceland",
+                "Ireland",
+                "Italy",
+                "Kosovo",
+                "Latvia",
+                "Liechtenstein",
+                "Lithuania",
+                "Luxembourg",
+                "Macedonia",
+                "Malta",
+                "Moldova",
+                "Monaco",
+                "Montenegro",
+                "The Netherlands",
+                "Norway",
+                "Poland",
+                "Portugal",
+                "Romania",
+                "Russia",
+                "San Marino",
+                "Serbia",
+                "Slovakia",
+                "Slovenia",
+                "Spain",
+                "Sweden",
+                "Switzerland",
+                "Turkey",
+                "Ukraine",
+                "United Kingdom",
+                "Vatican City"]
+            var cities;
+            var num;
+            d3.csv('cities.csv', d3.autoType)
+                .then(data=>{
+                    console.log('cities', data);
+                    cities = data;
+                    cities = cities.filter(city => european_cities.includes(city.country))
+                    
+                    num = cities.length;
+                    d3.select('.city-count')
+                        .text(cities.length)
+                    const width = 700;
+                    const height = 550;
+                    const svg = d3.select('.population-plot')
+                        .append('svg')
+                        .attr('width', width)
+                        .attr('height', height);
+
+                    var circles = svg.selectAll("circle")
+                        .data(cities)
+                        .enter()
+                        .append("circle")
+                        .attr('cx', function(d, i){
+                        // d: datum
+                        // i: index
+                            return d.x;
+                        })
+                        .attr("cy", (d,i)=>d.y)
+                        .attr("fill", "skyblue")
+                        .attr('r', function(d,i){
+                            if(d.population < 1000000)
+                                return 4;
+                            else
+                                return 8;
+                        });
+
+                        var labels = svg.selectAll("text")
+                            .data(cities)
+                            .enter()
+                            .append("text")
+                            .attr('x', (d,i) => d.x)
+                            .attr('y', (d,i)=>d.y)
+                            .text((d,i) => {
+                                if (d.population > 1000000)
+                                    return d.city;
+                                else 
+                                    return '';
+                                }
+                            )
+                            .attr('dy', -12)
+                            .attr('text-anchor', "middle")
+                            .attr('font-size', 10)
+                });
+            
+        </script>
+    </body>
+</html>
