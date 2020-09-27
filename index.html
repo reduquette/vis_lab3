@@ -205,7 +205,7 @@
                             let data = d.path[0].__data__;
                             
                             d3.select(".image")
-                                .attr("src", (d,i) => "./img/" + data.image);
+                                .attr("src", (d,i) => "img/" + data.image);
                             d3.select(".height")
                                 .text(d=>data.height_m);
                             d3.select(".city")
